@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Player : MonoBehaviour
@@ -12,35 +10,24 @@ public class Player : MonoBehaviour
     public Rigidbody2D rb;
     public Animator anim;
     public LayerMask groundLayer;
-    public AudioClip deadplayer;
-    public AudioClip shoot;
     float x;
 
     public float jumpForce = 7;
     public bool canJump = false;
+
     public Transform feet;
     public Vector2 size = new Vector2(1, 0.5f);
+
     public Transform firePoint;
     public float timer = 0;
-    public float timeBtwAttack = 2;
+    public float timeBtwAttack = 1;
     public bool canShoot = true;
     public GameObject bulletPrefab;
-
-    public float timerS = 5;
-    public float timeOfS= 0;
 
     private bool activo;
 
     public int hp = 3;
     public Text hpText;
-    public GameObject PULifePanel;
-    public Text timePULifeText;
-
-    public float timerTA = 5;
-    public float timeOfTA = 0;
-    public GameObject PUTimeAttackPanel;
-    public Text PUTimeAttackPanelText;
-
 
     void Start()
     {
@@ -55,7 +42,6 @@ public class Player : MonoBehaviour
         CheckIfCanShoot();
         Shoot();
         Bend();
-        CheckTimePowerUps();
     }
     void Move()
     {
@@ -97,7 +83,6 @@ public class Player : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                GameManager.instance.PlaySFX(shoot);
                 Instantiate(bulletPrefab, firePoint.position, transform.rotation);
                 canShoot = false;
                 //anim.SetTrigger("Shoot");
@@ -116,40 +101,7 @@ public class Player : MonoBehaviour
             }
         }
     }
-    public void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Enemy"))
-        {
-            TakeDamage();
 
-        }
-    }
-    public void TakeDamage()
-    {
-        Debug.Log("Daño Recibido");
-        hp--;
-        hpText.text = hp.ToString();
-        if (hp <= 0)
-        {
-            GameManager.instance.PlaySFX(deadplayer);
-            Destroy(gameObject);
-            SceneManager.LoadScene("GameOverScene");
-
-        }
-    }
-    public void TakeDamageBE()
-    {
-        Debug.Log("Daño Recibido");
-        hp--;
-        hpText.text = hp.ToString();
-        if (hp <= 0)
-        {
-            GameManager.instance.PlaySFX(deadplayer);
-            Destroy(gameObject);
-            SceneManager.LoadScene("GameOverScene");
-
-        }
-    }
     void Bend()
     {
         if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
@@ -168,73 +120,5 @@ public class Player : MonoBehaviour
             
         }
     }
-    public void ActivatePower(PowerUpType power)
-    {
-        Debug.Log("poder " + power.ToString());
-        switch (power)
-        {
-            case PowerUpType.Bullets:
-                //bulletsCount += 5;
-                //bulletsTxt.text = bulletsCount.ToString();
-                break;
-            case PowerUpType.DoubleDamage:
-                break;
-            case PowerUpType.BulletSpeed:
-                BulletSpeed();
-                break;
-            case PowerUpType.Shield:
-                ShootSpeed();
-                break;
-            case PowerUpType.Life:
-                PowerUpLife();
-                break;
-        }
-       
-    }
-    void PowerUpLife()
-    {
-        hp++;
-        hpText.text = hp.ToString();
-    }
-    void BulletSpeed()
-    {
-        speed = 20;
-    }
-    void ShootSpeed() 
-    {
-        timeBtwAttack = 1;
-    }
 
-    void CheckTimePowerUps()
-    {
-        if (speed == 20)
-        {
-            PULifePanel.SetActive(true);
-            timerS -= Time.deltaTime;
-            timePULifeText.text = timerS.ToString() + "/3";
-
-            if (timerS <= timeOfS)
-            {
-                timerS = 5;
-                speed = 4;
-                PULifePanel.SetActive(false);
-            }
-        }
-
-        if (timeBtwAttack == 1)
-        {
-            PUTimeAttackPanel.SetActive(true);
-            timerTA -= Time.deltaTime;
-            PUTimeAttackPanelText.text = timerTA.ToString();
-
-            if (timerTA <= timeOfS)
-            {
-                timerS = 5;
-                timeBtwAttack = 2;
-                PUTimeAttackPanel.SetActive(false);
-            }
-        }
-
-
-    }
 }

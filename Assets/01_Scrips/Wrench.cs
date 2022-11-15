@@ -5,11 +5,12 @@ using UnityEngine.UI;
 
 public class Wrench : MonoBehaviour
 {
+    // Start is called before the first frame update
     public float timeToDestroy = 10;
     int wrech = 0;
     public Text wrenchText;
 
-    public GameObject gameOverPanel;
+    public GameObject wrenchPanel;
     void Start()
     {
         wrenchText.text = wrech.ToString();
@@ -18,7 +19,7 @@ public class Wrench : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        
     }
     void OnTriggerEnter2D(Collider2D collision)
     {
@@ -30,7 +31,7 @@ public class Wrench : MonoBehaviour
             Destroy(gameObject);
             if (wrech == 3)
             {
-                gameOverPanel.SetActive(false);
+                wrenchPanel.SetActive(false);
             }
         }
 

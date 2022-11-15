@@ -6,35 +6,24 @@ public class Bullet : MonoBehaviour
 {
     public float speed = 5;
     public float timeToDestroy = 3;
-    public AudioClip explosionSound;
 
+    // Start is called before the first frame update
     void Start()
     {
         Destroy(gameObject, timeToDestroy);
     }
+
+    // Update is called once per frame
     void Update()
     {
         transform.Translate(Vector2.right * speed * Time.deltaTime);
     }
-    void OnCollisionEnter2D(Collision2D other)
+
+    void OnCollisionEnter2D(Collision2D collision)
     {
-        if (other.gameObject.CompareTag("Enemy"))
-        {
-
-            EnemyA d = other.gameObject.GetComponent<EnemyA>();
-            d.TakeDamageB();
-            Destroyed();
-
-        }
+        //Destroy(gameObject);
     }
 
-    void Destroyed()
-    {
-        //explosionAS.PlayOneShot(explosionSound);
-        
-        GameManager.instance.PlaySFX(explosionSound);
-        Destroy(gameObject);
-    }
     //void OnTriggerEnter2D(Collider2D collision)
     //{
     //    if (collision.gameObject.CompareTag("Ground"))
